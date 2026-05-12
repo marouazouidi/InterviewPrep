@@ -1,123 +1,162 @@
-# AGENTS.md — InterviewPrep
+# AGENTS.md — AI-Assisted Workflow
 
-> Reference file for the use of coding agents in this project.
-> Committed on Day 1 — every feature built with an agent is documented here.
-
----
-
-## 🧠 Project
-
-**InterviewPrep** — Laravel application for preparing technical interviews.
-Stack: Laravel 11, MySQL, Blade, Groq API (via `Http::` facade).
-Duration: 5 days | Start: 11/05/2026 | Deadline: 15/05/2026 13:00
+> This file documents the working methodology with AI coding agents used throughout this project.
+> It is committed on **Day 1** as required by the project constraints.
 
 ---
 
-## 🤖 Coding Agent Used
+## Project
 
-**OpenCode** (`opencode.ai`)
-Terminal-based, open-source, free — used in **Plan → Build** mode for every feature.
-
-> Standard workflow:
->
-> 1. Describe the feature + constraints in a `specs/<feature>.md` file
-> 2. Run OpenCode in **Plan** mode → review, validate, and adjust the plan
-> 3. Run OpenCode in **Build** mode → generate the code
-> 4. Manual review → apply adjustments if necessary
-> 5. Commit with explicit AI mention
+**InterviewPrep Laravel** — Technical interview preparation application
+Duration: 5 days (May 11–15, 2026)
+Developer: [Your First and Last Name]
 
 ---
 
-## 🔌 AI API Used
+## Coding Agents Used
 
-**Groq API** — `console.groq.com`
-Model: `llama3-8b-8192` (or `mixtral-8x7b-32768`)
-Request method: Laravel `Http::` facade — no external package
-API key stored only in `.env` → `GROQ_API_KEY`
+| Agent                      | Primary Use                          | Mode         |
+|----------------------------|--------------------------------------|--------------|
+| **OpenCode** (opencode.ai) | Scaffolding, migrations, controllers | Plan → Build |
+---
+
+## AI API Integrated
+
+**Groq API** — console.groq.com
+- Model: `llama3-70b-8192`
+- Free tier, no credit card required, ultra-fast (~1s response)
+- Integrated via native Laravel `Http::` facade — zero external packages
+- API key in `.env` only — never in source code, never committed
 
 ---
 
-## 📁 Specs Structure
+## Methodology: Plan → Build
 
-Each feature built with a coding agent has its own file inside `specs/`:
+Every feature follows this mandatory workflow before writing any code:
 
-```txt
-specs/
-├── auth.md
-├── domains-crud.md
-├── concepts-crud.md
-├── ai-generation.md
-└── dashboard.md        # bonus
+### Step 1 — Write the `.md` spec
+Before launching the agent, write a spec file in `specs/` containing:
+- Context and goal of the feature
+- User stories covered
+- What I WANT the agent to generate
+- What I DO NOT WANT (explicit constraints)
+- Expected file structure
+- Business rules
+
+### Step 2 — Plan Mode (read-only)
+Pass the spec to the agent in **Plan only** mode:
 ```
+"Read this spec and generate a detailed implementation plan.
+Do not generate any code. List the files to create/modify
+and explain the logic for each."
+```
+Review the plan, ask questions, adjust as needed.
 
-Each `specs/<feature>.md` file contains:
+### Step 3 — Build Mode (code generation)
+Once the plan is approved:
+```
+"Now implement the validated plan."
+```
+The agent generates code file by file.
 
-* **Goal**: what the feature should do
-* **What I WANT**: precise expected behaviors
-* **What I DO NOT WANT**: explicit constraints to guide the agent
-* **Agent output**: generated plan before manual edits
-* **Manual modifications**: what was changed and why
+### Step 4 — Mandatory manual review
+Before every commit:
+- Read every generated file
+- Verify business logic
+- Fix errors or hallucinations
+- Adjust style and variable names
+- Test manually in the browser
 
----
-
-## 📋 Features and AI Usage
-
-| Feature                       | Agent Used | Spec File                | Branch                  |
-| ----------------------------- | ---------- | ------------------------ | ----------------------- |
-| Authentication                | OpenCode   | `specs/auth.md`          | `feature/auth`          |
-| Domains CRUD                  | OpenCode   | `specs/domains-crud.md`  | `feature/domains-crud`  |
-| Concepts CRUD                 | OpenCode   | `specs/concepts-crud.md` | `feature/concepts-crud` |
-| AI Question Generation (Groq) | OpenCode   | `specs/ai-generation.md` | `feature/ai-generation` |
-| Dashboard (bonus)             | OpenCode   | `specs/dashboard.md`     | `feature/dashboard`     |
-
----
-
-## 📝 Commit Convention
-
-Any commit involving generated or AI-assisted code must explicitly mention AI usage:
-
-```txt
-feat(domains): add CRUD with Eloquent relations [AI-assisted: OpenCode]
-feat(ai): integrate Groq API for question generation [AI-assisted: OpenCode]
-fix(concepts): correct N+1 query with eager loading [AI-reviewed: OpenCode]
-refactor(forms): extract FormRequest classes [AI-assisted: OpenCode]
+### Step 5 — Commit with AI mention
+```bash
+git commit -m "feat(concepts): full CRUD with quick status update [AI-assisted: OpenCode]"
+git commit -m "fix(groq): handle timeout and 429 error [manual fix after AI output]"
 ```
 
 ---
 
-## ⚠️ Mandatory Rules
+## Commit Convention
 
-* The `GROQ_API_KEY` must **never** appear in the codebase or in any commit
-* API calls must be done **only** with Laravel `Http::` facade — no external SDKs
-* Every AI request must include **proper error handling** (no blank pages)
-* Generated results must be **saved in the database** before display
-* Zero N+1 queries — verified with Laravel Debugbar on all listing pages
+Format: `type(scope): description [AI mention]`
+
+**Types:**
+- `feat` — new feature
+- `fix` — bug fix
+- `refactor` — refactoring without new feature
+- `docs` — documentation
+- `chore` — config, setup, migrations
+
+**AI Mentions:**
+- `[AI-assisted: OpenCode]` — code generated by OpenCode, manually reviewed
+- `[AI-assisted: Claude Code]` — code generated by Claude Code, manually reviewed
+- `[manual fix after AI output]` — manual correction of incorrect AI output
+- `[manual]` — code written entirely by hand
+
+**Real commit examples:**
+```
+chore: init Laravel project + Breeze auth [manual]
+docs: add AGENTS.md workflow documentation [manual]
+feat(domains): migration + model + full CRUD [AI-assisted: OpenCode]
+feat(concepts): model with statusLabel and difficultyLabel accessors [AI-assisted: OpenCode]
+feat(concepts): quick status change from concept list [AI-assisted: Claude Code]
+feat(ai): GroqService Http:: facade + 5 question generation [AI-assisted: Claude Code]
+fix(ai): handle Groq API error - clean flash message, no blank page [manual fix]
+feat(dashboard): progress stats by domain and status [AI-assisted: OpenCode]
+feat(concepts): soft deletes + archived page + restore [AI-assisted: Claude Code]
+feat(concepts): combined status + difficulty filter [AI-assisted: OpenCode]
+```
 
 ---
 
-## 🔍 What the Agent Does Well
+## What Agents Do Well
 
-*(to be updated during the project)*
-
-* Quickly generates migrations and Eloquent models
-* Creates structured Form Request classes
-* Generates resourceful controller skeletons
-* Navigates the existing codebase before modifying files
+- **Fast scaffolding**: generating file structures, migrations, models, controllers
+- **Boilerplate**: Form Requests, resourceful routes, validation rules
+- **Eloquent relationships**: defining hasMany, belongsTo, eager loading with `with()`
+- **Basic Blade**: `@foreach` loops, `@if` conditions, forms
 
 ---
 
-## ⚡ What the Agent Hallucinates / Gets Wrong
+## What Agents Get Wrong / Hallucinate
 
-*(to be updated during the project)*
-
-* Sometimes generates reversed Eloquent relationships → always verify `belongsTo` vs `hasMany`
-* May forget `with()` eager loading → manually add it systematically
-* Groq prompts should be written manually — the agent tends to generate generic prompts
+- **Invented method names**: the agent sometimes invents Laravel methods that don't exist (e.g. `Http::withApiKey()` — does not exist; correct syntax is `Http::withHeaders()`)
+- **Incorrect business logic**: the status cycle `to_review → in_progress → mastered` had to be coded manually; the agent produced incorrect if/else logic
+- **Groq JSON parsing**: the agent sometimes forgets to check `$response->successful()` before parsing the JSON body
+- **N+1 not avoided**: agent generates code without `with()` — eager loading must be added manually after detection with Debugbar
+- **Soft deletes**: the agent often forgets to add both the `SoftDeletes` trait AND the `deleted_at` column in the migration at the same time
 
 ---
 
-## 👤 Author
+## Security Rules
 
-**Abderrahmane Merradou**
-DWWM Training Program — Class of 2026
-Individual project — 5 days
+1. The `GROQ_API_KEY` must **never** go into source code
+2. It lives in `.env` only
+3. `.env` is in `.gitignore` — verify before every push
+4. Use `.env.example` (with no real values) to document required variables
+5. Never ask the agent to hard-code any key in the code
+
+---
+
+## Spec Files
+
+Each feature has its own spec file in `specs/`:
+
+| File | Feature Covered | User Stories |
+|---|---|---|
+| `specs/auth.md` | Authentication | US1 |
+| `specs/domains-crud.md` | Domain CRUD | US2, US3, US4 |
+| `specs/concepts-crud.md` | Concept CRUD + filter + quick status | US5–US10 |
+| `specs/ai-generation.md` | AI Generation via Groq + history | US11, US12, US13 |
+
+---
+
+## Branch Structure
+
+```
+main
+├── feature/domains-crud
+├── feature/concepts-crud
+└── feature/ai-generation
+```
+
+Each feature branch is merged into `main` after full review and manual testing.
