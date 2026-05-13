@@ -168,7 +168,7 @@ For `show`, `edit`, `update`, `destroy`: use `auth()->user()->domains()->findOrF
 ```
 Prompt sent to OpenCode in Plan mode:
 
-"I'm building a Laravel 11 app. I want to create the full CRUD
+"I'm building a Laravel 13 app. I want to create the full CRUD
 for a Domain model (fields: name, color, user_id).
 Each user can only see their own domains.
 The list must show the total number of concepts per domain
