@@ -251,7 +251,7 @@ $domain = auth()->user()->domains()->findOrFail($domainId);
 ```
 Prompt sent to OpenCode in Plan mode:
 
-"In my Laravel 11 app, I want to create the full CRUD for a Concept model.
+"In my Laravel 13 app, I want to create the full CRUD for a Concept model.
 A concept belongs to a Domain. It has: title (string), explanation (text),
 difficulty (enum: junior/mid/senior), status (enum: to_review/in_progress/mastered).
 I want: SoftDeletes, two Accessors (statusLabel, difficultyLabel) using
@@ -269,7 +269,7 @@ List all files, controller methods, and the migration. Do not generate code."
 ```
 Prompt sent to Claude Code in Plan mode:
 
-"I have a ConceptController in Laravel 11. I want to add a
+"I have a ConceptController in Laravel 13. I want to add a
 PATCH /concepts/{concept}/status action that cycles the status
 in this order: to_review → in_progress → mastered → to_review.
 Show me how to add the route, the controller method,

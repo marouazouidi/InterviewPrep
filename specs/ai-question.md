@@ -353,7 +353,7 @@ Route::middleware('auth')->group(function () {
 ```
 Prompt sent to Claude Code in Plan mode:
 
-"In my Laravel 11 app, I want to integrate the Groq API to generate
+"In my Laravel 13 app, I want to integrate the Groq API to generate
 5 interview questions per concept. The call goes through the native
 Http:: facade — zero external packages. The key is in .env only.
 I want a GroqService class, a GeneratedQuestionController with

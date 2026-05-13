@@ -89,7 +89,7 @@ php artisan migrate
 ```
 Prompt sent to OpenCode in Plan mode:
 
-"I'm starting a Laravel 11 project. I want to install Laravel Breeze
+"I'm starting a Laravel 13 project. I want to install Laravel Breeze
 with Blade and TailwindCSS for authentication. List the files that
 will be created or modified, explain what each file does,
 and explain how to protect private routes with the auth middleware.
