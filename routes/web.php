@@ -19,6 +19,8 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    Route::get('/archived', [ConceptController::class, 'archived'])->name('concepts.archived');
+
     Route::prefix('/domains')->group(function(){
 
         Route::controller(DomainController::class)->group(function(){
@@ -39,8 +41,8 @@ Route::middleware('auth')->group(function () {
             Route::put('/concept/{concept}', 'update')->name('concepts.update');
             Route::patch('/concept/{concept}/status', 'updateStatus')->name('concepts.status');
             Route::delete('/concept/{concept}', 'archive')->name('concepts.archive');
-            Route::patch('/concept/{concept}/restore', 'restore')->name('concepts.restore');
-            Route::delete('/concept/{concept}/force', 'forceDelete')->name('concepts.forceDelete');
+            Route::patch('/concept/{concept}/restore', 'restore')->name('concepts.restore')->withTrashed();
+            Route::delete('/concept/{concept}/force', 'forceDelete')->name('concepts.forceDelete')->withTrashed();
             Route::post('/concept/{concept}/generate-questions', 'generateQuestions')->name('concepts.generate');
         });
 
