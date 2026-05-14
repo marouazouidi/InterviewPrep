@@ -6,9 +6,12 @@ use App\Models\Concept;
 use App\Models\GeneratedQuestion;
 use App\Services\GroqService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+
 
 class GeneratedQuestionController extends Controller
 {
+    use AuthorizesRequests;
 
     public function destroy(GeneratedQuestion $generatedQuestion): RedirectResponse
     {

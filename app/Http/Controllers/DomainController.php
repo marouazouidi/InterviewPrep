@@ -7,14 +7,18 @@ use App\Http\Requests\UpdateDomainRequest;
 use App\Models\Domain;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Request;
+
 
 class DomainController extends Controller
 {
+    use AuthorizesRequests;
     public function index(): View
     {
         $this->authorize('viewAny', Domain::class);
         
-        $domains =  auth()->user()
+        $domains =  Auth::user()
             ->domains()
             ->withCount([
                 'concepts',

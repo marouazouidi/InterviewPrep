@@ -9,9 +9,12 @@ use App\Models\Domain;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Support\Facades\Auth;
 
 class ConceptController extends Controller
 {
+    use AuthorizesRequests;
     public function create(Domain $domain): View
     {
         $this->authorize('create', [Concept::class, $domain]);
@@ -23,7 +26,7 @@ class ConceptController extends Controller
         $this->authorize('create', [Concept::class, $domain]);
         $domain->concepts()->create($request->validated());
 
-        return redirect()->route('domains.index', $domain)
+        return redirect()->route('domains.show', $domain)
             ->with('success', 'Concept created.');
     }
 
@@ -52,7 +55,7 @@ class ConceptController extends Controller
 
         $concept->update($request->validated());
 
-        return redirect()->route('concepts.index', $concept->domain)
+        return redirect()->route('domains.show', $concept->domain)
             ->with('success', 'Concept updated.');
     }
 
@@ -68,7 +71,6 @@ class ConceptController extends Controller
     public function restore(Concept $concept): RedirectResponse
     {
         $this->authorize('restore', $concept);
-        $concept = Concept::onlyTrashed()->findOrFail($concept->id);
 
         $concept->restore();
 
@@ -78,7 +80,6 @@ class ConceptController extends Controller
     public function forceDelete(Concept $concept): RedirectResponse
     {
         $this->authorize('forceDelete', $concept);
-        $concept = Concept::onlyTrashed()->findOrFail($concept->id);
 
         $concept->forceDelete();
 
@@ -102,14 +103,14 @@ class ConceptController extends Controller
     {
         $this->authorize('viewAny', Concept::class);
         $concepts = Concept::onlyTrashed()
-            ->whereIn('domain_id', auth()->user()->domains()->pluck('id'))
+            ->whereIn('domain_id', Auth::user()->domains()->pluck('id'))
             ->latest()
             ->get();
 
         return view('concepts.archived', compact('concepts'));
     }
 
-    public function generateQuestions(Concept $concept): RedirectResponse
+    public function generateQuestions(Concept $concept)
     {
 
     }
