@@ -15,7 +15,7 @@ class ConceptPolicy
 
     public function create(User $user, Concept $concept): bool
     {
-        return $user->is($concept->domain->createdBy);
+        return $user->id === $concept->domain->user_id;
     }
 
     public function update(User $user, Concept $concept): bool

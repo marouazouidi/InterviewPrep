@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\DomainController;
 use App\Http\Controllers\ConceptController;
+use App\Http\Controllers\GeneratedQuestionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -36,9 +37,17 @@ Route::middleware('auth')->group(function () {
             Route::get('/concept/{concept}', 'show')->name('concepts.show');
             Route::get('/concept/{concept}/edit', 'edit')->name('concepts.edit');
             Route::put('/concept/{concept}', 'update')->name('concepts.update');
+            Route::patch('/concept/{concept}/status', 'updateStatus')->name('concepts.status');
             Route::delete('/concept/{concept}', 'archive')->name('concepts.archive');
             Route::patch('/concept/{concept}/restore', 'restore')->name('concepts.restore');
             Route::delete('/concept/{concept}/force', 'forceDelete')->name('concepts.forceDelete');
+            Route::post('/concept/{concept}/generate-questions', 'generateQuestions')->name('concepts.generate');
+        });
+
+        Route::controller(GeneratedQuestionController::class)->group(function(){
+            Route::delete('/generated-questions/{generatedQuestion}', 'destroy')->name('generatedQuestions.destroy');
+            Route::get('/generated-questions/{generatedQuestion}/archive', 'regenerate')->name('generatedQuestions.regenerate');
+            Route::get('/concept/{concept}/questions','archivedQuestions')->name('generatedQuestions.index');
         });
     });
 });

@@ -9,31 +9,6 @@ use Illuminate\Http\RedirectResponse;
 
 class GeneratedQuestionController extends Controller
 {
-    public function __construct(private GroqService $groq) {}
-
-    public function store(Concept $concept): RedirectResponse
-    {
-        $this->authorize('view', $concept);
-
-        if (strlen($concept->explanation) < 50) {
-            return back()->with('error', 'The concept explanation is too short to generate questions.');
-        }
-
-        try {
-            $questions = $this->groq->generateInterviewQuestions(
-                $concept->title,
-                $concept->explanation
-            );
-
-            $concept->generatedQuestions()->create([
-                'questions' => $questions,
-            ]);
-
-            return back()->with('success', '5 new questions have been generated successfully.');
-        } catch (\Exception $e) {
-            return back()->with('error', 'Unable to generate questions: ' . $e->getMessage());
-        }
-    }
 
     public function destroy(GeneratedQuestion $generatedQuestion): RedirectResponse
     {

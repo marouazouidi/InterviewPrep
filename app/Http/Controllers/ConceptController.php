@@ -109,4 +109,8 @@ class ConceptController extends Controller
         return view('concepts.archived', compact('concepts'));
     }
 
+    public function generateQuestions(Concept $concept): RedirectResponse
+    {
+
+    }
 }
