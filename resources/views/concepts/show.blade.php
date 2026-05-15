@@ -67,7 +67,7 @@
                     <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
                         Generate 5 technical interview questions based on your explanation using AI.
                     </p>
-                    <form action="{{ route('concepts.generate', $concept) }}" method="POST">
+                    <form action="{{ route('generatedQuestions.store', $concept) }}" method="POST">
                         @csrf
                         <x-primary-button>{{ __('Generate Interview Questions') }}</x-primary-button>
                     </form>
@@ -97,11 +97,15 @@
                                         </button>
                                     </form>
                                 </div>
-                                <ol class="list-decimal list-inside space-y-2">
-                                    @foreach($generation->questions as $question)
-                                        <li class="text-gray-700 dark:text-gray-300">{{ $question }}</li>
-                                    @endforeach
-                                </ol>
+                                @php $questions = $generation->questions ?? []; @endphp
+                                @if(is_array($questions) && count($questions) > 0)
+                                    <ol class="list-decimal list-inside space-y-2">
+                                        {{-- @dd($questions) --}}
+                                        @foreach($questions as $question)
+                                            <li class="text-gray-700 dark:text-gray-300">{{ $question }}</li>
+                                        @endforeach
+                                    </ol>
+                                @endif
                             </div>
                         </div>
                     @endforeach

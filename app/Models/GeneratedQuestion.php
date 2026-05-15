@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class GeneratedQuestion extends Model
 {
-    protected $fillable = ['questions', 'concept_id'];
+    protected $guarded = [];
 
     protected function casts(): array
     {

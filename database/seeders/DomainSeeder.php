@@ -10,7 +10,10 @@ class DomainSeeder extends Seeder
 {
     public function run(): void
     {
-        $user = User::where('email', 'test@example.com')->first();
+        $user = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            ['name' => 'admin', 'password' => bcrypt('admin123')]
+        );
 
         Domain::factory()->create([
             'name' => 'Laravel ORM',

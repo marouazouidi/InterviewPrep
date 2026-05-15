@@ -43,14 +43,10 @@ Route::middleware('auth')->group(function () {
             Route::delete('/concept/{concept}', 'archive')->name('concepts.archive');
             Route::patch('/concept/{concept}/restore', 'restore')->name('concepts.restore')->withTrashed();
             Route::delete('/concept/{concept}/force', 'forceDelete')->name('concepts.forceDelete')->withTrashed();
-            Route::post('/concept/{concept}/generate-questions', 'generateQuestions')->name('concepts.generate');
         });
 
-        Route::controller(GeneratedQuestionController::class)->group(function(){
-            Route::delete('/generated-questions/{generatedQuestion}', 'destroy')->name('generatedQuestions.destroy');
-            Route::get('/generated-questions/{generatedQuestion}/archive', 'regenerate')->name('generatedQuestions.regenerate');
-            Route::get('/concept/{concept}/questions','archivedQuestions')->name('generatedQuestions.index');
-        });
+        Route::post('/concept/{concept}/generate-questions', [GeneratedQuestionController::class, 'store'])->name('generatedQuestions.store');
+        Route::delete('/generated-questions/{generatedQuestion}', [GeneratedQuestionController::class, 'destroy'])->name('generatedQuestions.destroy');
     });
 });
 
